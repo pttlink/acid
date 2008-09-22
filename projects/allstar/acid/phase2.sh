@@ -14,6 +14,7 @@ wget -q $REPO/installcd/astinstall.sh -O /etc/rc.d/astinstall.sh
 if [ $? -gt 0 ]
 then
         echo "Failure: Unable to download Asterisk install script"
+	sleep 30
         exit 255
 else
 	chmod 755 /etc/rc.d/astinstall.sh
@@ -26,6 +27,7 @@ wget -q $REPO/installcd/files.tar.gz -O $DESTDIR/files.tar.gz
 if [ $? -gt 0 ]
 then
 	echo "Failure: Unable to download files.tar.gz"
+	sleep 30
 	exit 255
 fi
 
@@ -52,18 +54,21 @@ cp configs/*.conf /etc/asterisk
 if [ $? -gt 0 ]
 then
 	echo "Failure: Unable to copy configs 1"
+	sleep 30
 	exit 255
 fi
 cp configs/$HWTYPE/*.conf /etc/asterisk
 if [ $? -gt 0 ]
 then
 	echo "Failure: Unable to copy configs 2"
+	sleep 30
 	exit 255
 fi
 mv /etc/asterisk/zaptel.conf /etc
 if [ $? -gt 0 ]
 then
 	echo "Failure: Unable to copy configs 3"
+	sleep 30
 	exit 255
 fi
 
@@ -73,6 +78,7 @@ chmod +x /etc/rc.d/rc.updatenodelist
 if [ $? -gt 0 ]
 then
 	echo "Failure: Unable to chmod script"
+	sleep 30
 	exit 255
 fi
 

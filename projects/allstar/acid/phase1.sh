@@ -17,6 +17,7 @@ rpm --import http://mirror.centos.org/centos/RPM-GPG-KEY-CentOS-5
 if [ $? -gt 0 ]
 then
 	echo "Failure: Unable to retrieve GPG KEY from mirror.centos.org"
+	sleep 30
 	exit 255
 fi
 echo "Updating system..."
@@ -24,6 +25,7 @@ yum -y update
 if [ $? -gt 0 ]
 then
 	echo "Failure: Unable to update Centos to latest binaries"
+	sleep 30
 	exit 255
 fi
 
@@ -32,6 +34,16 @@ yum -y install ntp
 if [ $? -gt 0 ]
 then
         echo "Failure: Unable to install ntp"
+	sleep 30
+        exit 255
+fi
+
+echo "Installing screen..."
+yum -y install screen
+if [ $? -gt 0 ]
+then
+        echo "Failure: Unable to install screen"
+	sleep 30
         exit 255
 fi
 
@@ -40,6 +52,7 @@ yum -y groupinstall "Development Tools"
 if [ $? -gt 0 ]
 then
 	echo "Failure: Unable install development tools"
+	sleep 30
 	exit 255
 fi
 echo "Installing Devel Headers for Libraries..."
@@ -47,6 +60,7 @@ yum -y install zlib-devel kernel-devel alsa-lib-devel ncurses-devel libusb-devel
 if [ $? -gt 0 ]
 then
 	echo "Failure: Unable install development library headers"
+	sleep 30
 	exit 255
 fi
 cp -f /etc/rc.d/rc.local.orig /etc/rc.d/rc.local
