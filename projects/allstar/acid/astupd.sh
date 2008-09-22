@@ -1,5 +1,6 @@
 #!/bin/bash
-REPO=dl.allstarlink.org
+REPO=$(cat /etc/rc.d/acidrepo)
+
 DESTDIR=/usr/src
 TMPDIR=/tmp
 FORCEDL=0

@@ -1,5 +1,15 @@
 #! /bin/bash
-REPO=http://dl.allstarlink.org
+
+# Determine the repository from the URL embedded in rc.local at initial load
+
+if [ -e /etc/rc.d/acidrepo ]
+then
+	REPO=$(cat /etc/rc.d/acidrepo)
+else
+	REPO=$(grep http /etc/rc.d/rc.local | cut -d ' ' -f8 | cut -d '/' -f-3)
+	echo $REPO >/etc/rc.d/acidrepo
+fi
+
 echo "****** Phase 1 post install ******"
 sleep 1
 echo "Importing centos 5 gpg key..."
@@ -33,7 +43,7 @@ then
 	exit 255
 fi
 echo "Installing Devel Headers for Libraries..."
-yum -y install kernel-devel alsa-lib-devel ncurses-devel libusb-devel newt-devel
+yum -y install zlib-devel kernel-devel alsa-lib-devel ncurses-devel libusb-devel newt-devel openssl-devel
 if [ $? -gt 0 ]
 then
 	echo "Failure: Unable install development library headers"

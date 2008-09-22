@@ -1,7 +1,7 @@
 #! /bin/bash
 HWTYPE=usbradio
 #HWTYPE=pciradio
-REPO=http://dl.allstarlink.org
+REPO=$(cat /etc/rc.d/acidrepo)
 
 echo "****** Phase 2 post install ******"
 sleep 1
@@ -87,8 +87,8 @@ fi
 echo "Getting setup scripts..."
 wget -q $REPO/installcd/nodesetup.sh -O /root/nodesetup.sh
 wget -q $REPO/installcd/setup.sh -O /root/setup.sh
-wget -q $REPO/installcd/astupd.sh /root/astupd.sh
-chmod 770 /root/setup.sh /root/nodesetup.sh
+wget -q $REPO/installcd/astupd.sh -O /root/astupd.sh
+chmod 770 /root/setup.sh /root/nodesetup.sh /root/astupd.sh
 
 sync
 
