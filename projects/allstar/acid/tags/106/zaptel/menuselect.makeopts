@@ -1,4 +1,0 @@
-MENUSELECT_MODULES=torisa wct4xxp wctc4xxp wctdm24xxp wcusb xpp 
-MENUSELECT_UTILS=fxstest sethdlc-new ztdiag 
-MENUSELECT_FIRMWARE=
-MENUSELECT_BUILD_DEPS=ztdynamic wct4xxp wctc4xxp wctdm24xxp 
