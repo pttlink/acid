@@ -47,6 +47,15 @@ then
         exit 255
 fi
 
+echo "Installing sox..."
+yum -y install sox
+if [ $? -gt 0 ]
+then
+        echo "Failure: Unable to install sox"
+	sleep 30
+        exit 255
+fi
+
 echo "Installing Development Tools..."
 yum -y groupinstall "Development Tools"
 if [ $? -gt 0 ]
