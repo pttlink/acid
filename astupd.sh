@@ -86,6 +86,8 @@ fi
 
 mv $TMPDIR/files.tar.gz $DESTDIR
 rm -f $TMPDIR/files.tar.*
+(cd $DESTDIR; rm -rf asterisk libpri zaptel allstar configs irlp* Makefile) 
+(cd /usr/lib/asterisk/modules; rm *.so)
 if [ -e /etc/rc.d/astinstall.sh ]
 then
 	/etc/rc.d/astinstall.sh
