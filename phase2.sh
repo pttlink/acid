@@ -94,7 +94,8 @@ echo "Getting setup scripts..."
 wget -q $REPO/installcd/nodesetup.sh -O /root/nodesetup.sh
 wget -q $REPO/installcd/setup.sh -O /root/setup.sh
 wget -q $REPO/installcd/astupd.sh -O /root/astupd.sh
-chmod 770 /root/setup.sh /root/nodesetup.sh /root/astupd.sh
+wget -q $REPO/installcd/irlpsetup.sh -O /root/irlpsetup.sh
+chmod 770 /root/setup.sh /root/nodesetup.sh /root/astupd.sh /root/irlpsetup.sh
 
 sync
 
