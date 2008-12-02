@@ -283,7 +283,7 @@ else
 fi
 
 #Checks to see if the stationID was generated correctly.
-if [ ${#STATION} -ne "7" ] ; then
+if [ ${#STATION} -lt "6" ] ; then
     echo There was an error with your stationID. Please contact installs@irlp.net for assitance.
     exit 1
 fi
@@ -379,6 +379,7 @@ then
   echo " done."
 else
   rm -f /tmp/irlp-backup/custom/rc.* > /dev/null 2>&1
+  rm -f /tmp/irlp-backup/custom/irlp_fullreset > /dev/null 2>&1
   cp -Rpf /tmp/irlp-backup/custom $ID
 fi
 
