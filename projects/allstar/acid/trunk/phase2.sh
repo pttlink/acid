@@ -123,6 +123,11 @@ chkconfig yum-updatesd off
 
 chkconfig asterisk off 
 
+if [ -e /root/setup.sh ]
+then
+	(cd /root; ./setup.sh)
+	exit
+fi
 echo "Script done. Rebooting...."
 sleep 2
 reboot
