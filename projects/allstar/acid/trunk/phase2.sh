@@ -89,13 +89,15 @@ then
 	echo "/etc/rc.d/rc.updatenodelist &" >> /etc/rc.d/rc.local
 fi
 
-
+mkdir -p /root/acid
 echo "Getting setup scripts..."
-wget -q $REPO/installcd/nodesetup.sh -O /root/nodesetup.sh
-wget -q $REPO/installcd/setup.sh -O /root/setup.sh
-wget -q $REPO/installcd/astupd.sh -O /root/astupd.sh
-wget -q $REPO/installcd/irlpsetup.sh -O /root/irlpsetup.sh
-chmod 770 /root/setup.sh /root/nodesetup.sh /root/astupd.sh /root/irlpsetup.sh
+wget -q $REPO/installcd/nodesetup.sh -O /root/acid/nodesetup.sh
+wget -q $REPO/installcd/setup.sh -O /root/acid/setup.sh
+wget -q $REPO/installcd/astupd.sh -O /root/acid/astupd.sh
+wget -q $REPO/installcd/irlpsetup.sh -O /root/acid/irlpsetup.sh
+wget -q $REPO/installcd/astres.sh -O /root/acid/astres.sh
+wget -q $REPO/installcd/backup.sh -O /root/acid/backup.sh
+chmod 770 /root/setup.sh /root/nodesetup.sh /root/acid/*.sh
 
 sync
 
