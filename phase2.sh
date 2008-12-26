@@ -2,6 +2,34 @@
 HWTYPE=usbradio
 #HWTYPE=pciradio
 REPO=$(cat /etc/rc.d/acidrepo)
+SSHDCONF=/etc/ssh/sshd_config
+SSHDPORT=222
+TMP=/tmp
+
+function die {
+        echo "Fatal error: $1"
+        exit 255
+}
+
+
+function promptyn
+{
+        echo -n "$1 [y/N]? "
+        read ANSWER
+        if [ ! -z $ANSWER ]
+        then
+                if [ $ANSWER = Y ] || [ $ANSWER = y ]
+                then
+                        ANSWER=Y
+                else
+                        ANSWER=N
+                fi
+        else
+                ANSWER=N
+        fi
+                                                              8,0-1         22%
+
+
 
 echo "****** Phase 2 post install ******"
 sleep 1
@@ -92,7 +120,6 @@ fi
 mkdir -p /root/acid
 echo "Getting setup scripts..."
 wget -q $REPO/installcd/nodesetup.sh -O /root/acid/nodesetup.sh
-wget -q $REPO/installcd/setup.sh -O /root/acid/setup.sh
 wget -q $REPO/installcd/astupd.sh -O /root/acid/astupd.sh
 wget -q $REPO/installcd/irlpsetup.sh -O /root/acid/irlpsetup.sh
 wget -q $REPO/installcd/astres.sh -O /root/acid/astres.sh
@@ -125,13 +152,27 @@ chkconfig rpcidmapd off
 chkconfig avahi-daemon off
 chkconfig yum-updatesd off
 
-chkconfig asterisk off 
+echo "**************************************"
+echo "*   Setup for app_rpt/Centos  *"
+echo "**************************************"
+echo
+echo "You must change the root password to something stronger..."
+passwd root
 
-if [ -e /root/setup.sh ]
+echo "Changing SSHD port number to $SSHDPORT..."
+sed "s/^#Port[ \t]*[0-9]*/Port 222/" <$SSHDCONF >$TMP/sshd_config
+mv -f $TMP/sshd_config $SSHDCONF || die "mv 1 failed"
+echo "Enabling SSHD and Asterisk to start on next boot..."
+chkconfig sshd on
+chkconfig iptables off
+
+if [ -e /root/acid/nodesetup.sh ]
 then
-	(cd /root; ./setup.sh)
-	exit
+        /root/acid/nodesetup.sh || die "Could not modify asterisk config files!"
+	exit 
 fi
+
+
 echo "Script done. Rebooting...."
 sleep 2
 reboot
