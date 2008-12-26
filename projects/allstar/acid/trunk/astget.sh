@@ -111,4 +111,5 @@ mv -f $TMPDIR/files.tar.gz $DESTDIR
 # Exec install script
 #
 $RCD/astinstall.sh
+asterisk -rx "restart now"
 
