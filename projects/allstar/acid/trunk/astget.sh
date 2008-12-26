@@ -102,7 +102,6 @@ fi
 #
 # Copy the source files to the destination
 #
-echo "Moving install files"
 rm -f $DESTDIR/files.tar.*
 mv -f $TMPDIR/files.tar.gz $DESTDIR
 (cd $DESTDIR; rm -rf asterisk libpri zaptel allstar configs irlp* Makefile) 
@@ -111,5 +110,12 @@ mv -f $TMPDIR/files.tar.gz $DESTDIR
 # Exec install script
 #
 $RCD/astinstall.sh
-asterisk -rx "restart now"
+#
+# Restart asterisk if it is running
+#
+if [ -e /var/run/asterisk.ctl ]
+then
+	echo "Restarting Asterisk...."
+	asterisk -rx "restart now"
+fi
 
