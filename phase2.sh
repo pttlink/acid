@@ -154,7 +154,7 @@ echo "**************************************"
 echo "*   Setup for app_rpt/Centos  *"
 echo "**************************************"
 echo
-echo "You must change the root password to something stronger..."
+echo "You must supply a root password..."
 passwd root
 
 echo "Changing SSHD port number to $SSHDPORT..."
@@ -170,8 +170,9 @@ then
 fi
 
 
-echo "Script done. Rebooting...."
-sleep 2
+echo "Script done. Please plug in your modified USB fob or URI now!"
+sleep 10
+echo "Rebooting...."
 reboot
 exit
 
