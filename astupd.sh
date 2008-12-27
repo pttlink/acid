@@ -1,8 +1,8 @@
 #!/bin/bash
 REPO=$(cat /etc/rc.d/acidrepo)
 
-rm -f astget.sh
-wget -q $REPO/installcd/astget.sh -O astget.sh
+rm -f /tmp/astget.sh
+wget -q $REPO/installcd/astget.sh -O /tmp/astget.sh
 
 if [ $? -gt 0 ]
 then
@@ -10,12 +10,12 @@ then
 	exit 1
 fi
 
-if [ -e astget.sh ]
+if [ -e /tmp/astget.sh ]
 then
-	chmod 755 astget.sh
-	./astget.sh
+	chmod 755 /tmp/astget.sh
+	/tmp/astget.sh
 fi
 
-rm -f astget.sh
+rm -f /tmp/astget.sh
 
 
