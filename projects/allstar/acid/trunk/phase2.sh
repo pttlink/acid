@@ -124,6 +124,7 @@ wget -q $REPO/installcd/astres.sh -O /root/acid/astres.sh
 wget -q $REPO/installcd/backup.sh -O /root/acid/backup.sh
 wget -q $REPO/installcd/astup.sh -O /root/acid/astup.sh
 wget -q $REPO/installcd/astdn.sh -O /root/acid/astdn.sh
+wget -q $REPO/installcd/acidvers -O /root/acid/acidvers
 chmod 770 /root/acid/*.sh
 
 sync
