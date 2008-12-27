@@ -27,9 +27,7 @@ function promptyn
         else
                 ANSWER=N
         fi
-                                                              8,0-1         22%
-
-
+}
 
 echo "****** Phase 2 post install ******"
 sleep 1
@@ -169,7 +167,6 @@ chkconfig iptables off
 if [ -e /root/acid/nodesetup.sh ]
 then
         /root/acid/nodesetup.sh || die "Could not modify asterisk config files!"
-	exit 
 fi
 
 
