@@ -122,6 +122,7 @@ wget -q $REPO/installcd/astupd.sh -O /root/acid/astupd.sh
 wget -q $REPO/installcd/irlpsetup.sh -O /root/acid/irlpsetup.sh
 wget -q $REPO/installcd/astres.sh -O /root/acid/astres.sh
 wget -q $REPO/installcd/backup.sh -O /root/acid/backup.sh
+wget -q $REPO/installcd/restore.sh -O /root/acid/restore.sh
 wget -q $REPO/installcd/astup.sh -O /root/acid/astup.sh
 wget -q $REPO/installcd/astdn.sh -O /root/acid/astdn.sh
 wget -q $REPO/installcd/acidvers -O /root/acid/acidvers
