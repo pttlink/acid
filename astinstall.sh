@@ -89,12 +89,13 @@ then
 	echo "Failure: Unable to compile Asterisk 2"
 	exit 255
 fi
-sed 's/app_rpt//g;s/chan_usbradio//g;s/MENUSELECT_CFLAGS.*/MENUSELECT_CFLAGS=LOADABLE_MODULES MALLOC_DEBUG RADIO_RELAX/g' < menuselect.makeopts > foo
+sed 's/app_rpt//g;s/chan_usbradio//g;s/MENUSELECT_CFLAGS.*/MENUSELECT_CFLAGS=LOADABLE_MODULES MALLOC_DEBUG RADIO_RELAX/g;s/MENUSELECT_MOH=MOH-FREEPLAY-WAV/MENUSELECT_MOH=/g;s/MENUSELECT_EXTRA_SOUNDS=/MENUSELECT_EXTRA_SOUNDS=EXTRA-SOUNDS-EN-GSM/g' < menuselect.makeopts > foo
 if [ $? -ne 0 ]
 then
 	echo "Failure: Unable to edit menuselect.makeopts"
 	exit 255
 fi
+
 mv menuselect.makeopts menuselect.makeopts.old
 if [ $? -gt 0 ]
 then
