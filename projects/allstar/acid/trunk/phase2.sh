@@ -126,6 +126,9 @@ wget -q $REPO/installcd/restore.sh -O /root/acid/restore.sh
 wget -q $REPO/installcd/astup.sh -O /root/acid/astup.sh
 wget -q $REPO/installcd/astdn.sh -O /root/acid/astdn.sh
 wget -q $REPO/installcd/acidvers -O /root/acid/acidvers
+wget -q $REPO/installcd/savenode.conf -O /etc/asterisk/savenode.conf
+wget -q $REPO/installcd/savenode.sh -O /root/acid/savenode.sh
+
 chmod 770 /root/acid/*.sh
 
 sync
