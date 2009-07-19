@@ -1,4 +1,20 @@
 #! /bin/bash
+INSTALLOG=/root/acid-install.log
+
+function log {
+	local tstamp=$(/bin/date)
+	echo "$tstamp:$1" >>$INSTALLOG
+}
+
+function logecho {
+	echo "$1"
+	log "$1"
+}
+
+function die {
+        logecho "Fatal error: $1"
+        exit 255
+}
 
 # Determine the repository from the URL embedded in rc.local at initial load
 
@@ -10,82 +26,89 @@ else
 	echo $REPO >/etc/rc.d/acidrepo
 fi
 
-echo "****** Phase 1 post install ******"
+logecho "****** Phase 1 post install ******"
+logecho "Repository to use: $REPO"
+
 sleep 1
-echo "Importing centos 5 gpg key..."
+logecho "Importing centos 5 gpg key..."
 rpm --import http://mirror.centos.org/centos/RPM-GPG-KEY-CentOS-5
 if [ $? -gt 0 ]
 then
-	echo "Failure: Unable to retrieve GPG KEY from mirror.centos.org"
-	sleep 30
-	exit 255
+	die "Unable to retrieve GPG KEY from mirror.centos.org"
 fi
-echo "Updating system..."
+logecho "Updating system..."
 yum -y update 
 if [ $? -gt 0 ]
 then
-	echo "Failure: Unable to update Centos to latest binaries"
-	sleep 30
-	exit 255
+	die "Unable to update Centos to latest binaries"
 fi
 
-echo "Installing ntp..."
+logecho "Installing ntp..."
 yum -y install ntp
 if [ $? -gt 0 ]
 then
-        echo "Failure: Unable to install ntp"
-	sleep 30
-        exit 255
+        die "Unable to install ntp"
 fi
 
-echo "Installing screen..."
+logecho "Installing screen..."
 yum -y install screen
 if [ $? -gt 0 ]
 then
-        echo "Failure: Unable to install screen"
-	sleep 30
-        exit 255
+        die "Unable to install screen"
 fi
 
-echo "Installing sox..."
+logecho "Installing sox..."
 yum -y install sox
 if [ $? -gt 0 ]
 then
-        echo "Failure: Unable to install sox"
-	sleep 30
-        exit 255
+        die "Unable to install sox"
 fi
 
-echo "Installing Development Tools..."
+logecho "Installing Development Tools..."
 yum -y groupinstall "Development Tools"
 if [ $? -gt 0 ]
 then
-	echo "Failure: Unable install development tools"
+	die "Unable install development tools"
 	sleep 30
 	exit 255
 fi
-echo "Installing Devel Headers for Libraries..."
+logecho "Installing Devel Headers for Libraries..."
 yum -y install zlib-devel kernel-devel alsa-lib-devel ncurses-devel libusb-devel newt-devel openssl-devel
 if [ $? -gt 0 ]
 then
-	echo "Failure: Unable install development library headers"
+	die "Unable install development library headers"
 	sleep 30
 	exit 255
 fi
 cp -f /etc/rc.d/rc.local.orig /etc/rc.d/rc.local
 cat <<EOF >>/etc/rc.d/rc.local
+INSTALLOG=/root/acid-install.log
+function log {
+        local tstamp=$(/bin/date)
+        echo "$tstamp:$1" >>$INSTALLOG
+}
+
+function logecho {
+        echo "$1"
+        log "$1"
+}
+
+function die {
+        logecho "Fatal error: $1"
+        exit 255
+}
 (cd /etc/rc.d; rm -f phase2.sh; wget -q $REPO/installcd/phase2.sh) 
 if [ -e /etc/rc.d/phase2.sh ]
 then
 chmod 755 /etc/rc.d/phase2.sh
 /etc/rc.d/phase2.sh
 else
-echo "Unable to download post install script phase2.sh!"
-echo "Installation aborted"
-sleep 3
+logecho "Unable to download post install script phase2.sh!"
+die "Installation aborted"
 fi
 EOF
 sync
+logecho "phase1.sh done, rebooting..."
 reboot
 
 
