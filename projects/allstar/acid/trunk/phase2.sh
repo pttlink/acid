@@ -6,6 +6,7 @@ SSHDCONF=/etc/ssh/sshd_config
 SSHDPORT=222
 TMP=/tmp
 INSTALLOG=/root/acid-install.log
+SCRIPTLOC=/usr/local/sbin
 
 function log {
         local tstamp=$(/bin/date)
@@ -111,21 +112,18 @@ then
 	echo "/etc/rc.d/rc.updatenodelist &" >> /etc/rc.d/rc.local
 fi
 
-mkdir -p /root/acid
 logecho "Getting setup scripts..."
-wget -q $REPO/installcd/nodesetup.sh -O /root/acid/nodesetup.sh
-wget -q $REPO/installcd/astupd.sh -O /root/acid/astupd.sh
-wget -q $REPO/installcd/irlpsetup.sh -O /root/acid/irlpsetup.sh
-wget -q $REPO/installcd/astres.sh -O /root/acid/astres.sh
-wget -q $REPO/installcd/backup.sh -O /root/acid/backup.sh
-wget -q $REPO/installcd/restore.sh -O /root/acid/restore.sh
-wget -q $REPO/installcd/astup.sh -O /root/acid/astup.sh
-wget -q $REPO/installcd/astdn.sh -O /root/acid/astdn.sh
-wget -q $REPO/installcd/acidvers -O /root/acid/acidvers
+wget -q $REPO/installcd/nodesetup.sh -O $SCRIPTLOC/nodesetup.sh
+wget -q $REPO/installcd/astupd.sh -O $SCRIPTLOC/astupd.sh
+wget -q $REPO/installcd/irlpsetup.sh -O $SCRIPTLOC/irlpsetup.sh
+wget -q $REPO/installcd/astres.sh -O $SCRIPTLOC/astres.sh
+wget -q $REPO/installcd/astup.sh -O $SCRIPTLOC/astup.sh
+wget -q $REPO/installcd/astdn.sh -O $SCRIPTLOC/astdn.sh
+wget -q $REPO/installcd/savenode.sh -O $SCRIPTLOC/savenode.sh
+chmod 770 $SCRIPTLOC/*.sh
+logecho "Getting misc files..."
+wget -q $REPO/installcd/acidvers -O /etc/rc.d/acidvers
 wget -q $REPO/installcd/savenode.conf -O /etc/asterisk/savenode.conf
-wget -q $REPO/installcd/savenode.sh -O /root/acid/savenode.sh
-
-chmod 770 /root/acid/*.sh
 
 sync
 
@@ -165,9 +163,9 @@ logecho "Enabling SSHD and Asterisk to start on next boot..."
 chkconfig sshd on
 chkconfig iptables off
 logecho "Running nodesetup.sh..."
-if [ -e /root/acid/nodesetup.sh ]
+if [ -e $SCRIPTLOC/nodesetup.sh ]
 then
-        /root/acid/nodesetup.sh || die "Could not modify asterisk config files!"
+        $SCRIPTLOC/nodesetup.sh || die "Could not modify asterisk config files!"
 fi
 
 
