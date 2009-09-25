@@ -5,9 +5,47 @@ DESTDIR=/usr/src
 TMPDIR=/tmp
 FORCEDL=0
 IGNOREHASH=0
+IGNOREVERSCK=0
 
 
+
+
+function die {
+        echo "Fatal error: $1"
+        exit 1
+}
+
+#
+# Stop people from using astupd unwisely
+#
+
+if [ $IGNOREVERSCK -eq 0 ]
+then
+	echo "Checking to see if this system can be updated using astupd..."
+
+	if ! [ -f $RCD/acidvers ]
+	then
+		die "This version of acid is too old to be updated, an install from scratch will be necessary";
+	fi
+
+	wget -q -O /tmp/siteacidvers $REPO/installcd/acidvers
+	if [ $? -ne 0 ]
+	then
+		die "Cannot contact the download site: $SITE, please check your Internet connectivity and/or try again later"
+	fi
+
+	CURACIDVERS=$(cat $RCD/acidvers)
+	SITEACIDVERS=$(cat /tmp/siteacidvers)
+	rm -f /tmp/siteacidvers
+	if [ $CURACIDVERS != $SITEACIDVERS ]
+	then
+		echo "You have ACID version: $CURACIDVERS and the version on $REPO is: $SITEACIDVERS"
+		die "astupd.sh cannot be used, you must re-install ACID to update this system"
+	fi
+fi
+	
 echo "Checking for updates to Asterisk...."
+
 
 #
 # Calculate local copy of sha256sum
@@ -61,8 +99,7 @@ fi
 wget -q $REPO/installcd/files.tar.gz -O $TMPDIR/files.tar.gz
 if [ $? -gt 0 ]
 then
-	echo "Cannot download a copy of files.tar.gz!"
-        exit 1;
+	die "Cannot download a copy of files.tar.gz!"
 fi
 
 #
@@ -75,8 +112,7 @@ then
 	diff -q $TMPDIR/files.tar.gz.sha256sum $TMPDIR/files.tar.gz.repo.sha256sum 2>/dev/null >/dev/null
 	if [ $? -ne 0 ]
 	then
-		echo "SHA256 check failed!"
-		exit 1;
+		die "SHA256 check failed!"
 	fi
 fi
 
@@ -88,15 +124,13 @@ rm $RCD/astinstall.sh
 wget -q $REPO/installcd/astinstall.sh -O $RCD/astinstall.sh
 if [ $? -gt 0 ]
 then
-	echo "Cannot download a copy of astinstall.sh!"
-        exit 1;
+	die "Cannot download a copy of astinstall.sh!"
 fi
 if [ -e $RCD/astinstall.sh ]
 then
 	chmod 770 $RCD/astinstall.sh
 else
-	echo "Cannot find astinstall.sh!"
-	exit 1
+	die "Cannot find astinstall.sh!"
 fi
 
 #
