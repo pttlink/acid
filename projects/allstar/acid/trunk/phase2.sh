@@ -120,6 +120,7 @@ wget -q $REPO/installcd/astres.sh -O $SCRIPTLOC/astres.sh
 wget -q $REPO/installcd/astup.sh -O $SCRIPTLOC/astup.sh
 wget -q $REPO/installcd/astdn.sh -O $SCRIPTLOC/astdn.sh
 wget -q $REPO/installcd/savenode.sh -O $SCRIPTLOC/savenode.sh
+wget -q $REPO/installcd/nscheck.sh -O $SCRIPTLOC/nscheck.sh
 chmod 770 $SCRIPTLOC/*.sh
 logecho "Getting misc files..."
 wget -q $REPO/installcd/acidvers -O /etc/rc.d/acidvers
