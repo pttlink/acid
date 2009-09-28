@@ -97,13 +97,35 @@ then
 	die "Unable to copy configs 3"
 fi
 
-logecho "Updating local script(s)..."
-cp $DESTDIR/allstar/rc.updatenodelist /etc/rc.d/rc.updatenodelist
-chmod +x /etc/rc.d/rc.updatenodelist
-if [ $? -gt 0 ]
+logecho "Getting misc files..."
+
+wget -q $REPO/installcd/acidvers -O /etc/rc.d/acidvers
+if [ $? -ne 0 ]
 then
-	die "Unable to chmod script"
+	die "Could set ACID version"
 fi
+
+wget -q $REPO/installcd/savenode.conf -O /etc/asterisk/savenode.conf
+
+logecho "Getting control and helper scripts..."
+
+wget -q $REPO/installcd/scrget.sh -O /tmp/scrget.sh
+if [ $? -ne 0 ]
+then
+	die "Download of scrget.sh failed!"
+fi
+
+chmod 750 /tmp/scrget.sh
+/tmp/scrget.sh
+
+if [ $? -ne 0 ]
+then
+	die "Could not execute script /tmp/scrget.sh"
+fi
+
+rm -f /tmp/scrget.sh
+
+logecho "Installing rc.updatenodelist in /usr/local"
 
 mv -f /etc/rc.d/rc.local.orig /etc/rc.d/rc.local; sync
 egrep updatenodelist /etc/rc.d/rc.local
@@ -111,20 +133,6 @@ if [ $? -gt 0 ]
 then
 	echo "/etc/rc.d/rc.updatenodelist &" >> /etc/rc.d/rc.local
 fi
-
-logecho "Getting setup scripts..."
-wget -q $REPO/installcd/nodesetup.sh -O $SCRIPTLOC/nodesetup.sh
-wget -q $REPO/installcd/astupd.sh -O $SCRIPTLOC/astupd.sh
-wget -q $REPO/installcd/irlpsetup.sh -O $SCRIPTLOC/irlpsetup.sh
-wget -q $REPO/installcd/astres.sh -O $SCRIPTLOC/astres.sh
-wget -q $REPO/installcd/astup.sh -O $SCRIPTLOC/astup.sh
-wget -q $REPO/installcd/astdn.sh -O $SCRIPTLOC/astdn.sh
-wget -q $REPO/installcd/savenode.sh -O $SCRIPTLOC/savenode.sh
-wget -q $REPO/installcd/nscheck.sh -O $SCRIPTLOC/nscheck.sh
-chmod 770 $SCRIPTLOC/*.sh
-logecho "Getting misc files..."
-wget -q $REPO/installcd/acidvers -O /etc/rc.d/acidvers
-wget -q $REPO/installcd/savenode.conf -O /etc/asterisk/savenode.conf
 
 sync
 
