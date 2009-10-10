@@ -7,6 +7,8 @@ SSHDPORT=222
 TMP=/tmp
 INSTALLOG=/root/acid-install.log
 SCRIPTLOC=/usr/local/sbin
+ZSYNCVERS=zsync-0.6.1
+ZSYNCSOURCEKIT=$ZSYNCVERS.tar.bz2
 
 function log {
         local tstamp=$(/bin/date)
@@ -75,7 +77,36 @@ else
 	die "exec of /etc/rc.d/astinstall.sh failed!"
 fi
 
+#Download, compile and install zsync
+
+logecho "Downloading zsync from $REPO"
+wget -q -O /tmp/$ZSYNCSOURCEKIT $REPO/installcd/$ZSYNCSOURCEKIT
+if [ $? -gt 0 ]
+then
+        die "Unable to download $ZSYNCVERS"
+fi
+cd /usr/src
+tar xvjf /tmp/$ZSYNCSOURCEKIT
+if [ $? -gt 0 ]
+then
+        die "Unable to unpack $ZSYNCVERS"
+fi
+cd /usr/src/$ZSYNCVERS
+./configure
+make
+if [ $? -gt 0 ]
+then
+        die "Unable to make $ZSYNCVERS"
+fi
+make install
+if [ $? -gt 0 ]
+then
+        die "Unable to install $ZSYNCVERS"
+fi
+rm -f /tmp/$ZSYNCSOURCEKIT
+
 cd $DESTDIR
+
 
 logecho "Setting up config..."
 rm -rf /etc/asterisk
