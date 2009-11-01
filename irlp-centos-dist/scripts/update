@@ -112,6 +112,7 @@ irlp_wave_client mynetd nc pgp remote_admin_server rsync pgp nc
    done
 
    cp $UPDATEDIR/audio/* $IRLPDIR/audio
+   cp $UPDATEDIR/scripts/exp-x-reference $IRLPDIR/scripts
 
    cp /usr/bin/wget $IRLPDIR/bin
    cp /usr/bin/sox $IRLPDIR/bin
