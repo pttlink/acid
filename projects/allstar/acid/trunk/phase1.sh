@@ -73,7 +73,14 @@ then
 	exit 255
 fi
 logecho "Installing Devel Headers for Libraries..."
-yum -y install zlib-devel kernel-devel alsa-lib-devel ncurses-devel libusb-devel newt-devel openssl-devel
+uname -r | grep  PAE >/dev/null 2>&1
+if [ $? -ne 0 ]
+then
+	kdevel=kernel-devel
+else
+	kdevel=kernel-PAE-devel	
+fi
+yum -y install zlib-devel "$kdevel" alsa-lib-devel ncurses-devel libusb-devel newt-devel openssl-devel
 if [ $? -gt 0 ]
 then
 	die "Unable install development library headers"
