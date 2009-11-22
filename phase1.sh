@@ -1,5 +1,6 @@
 #! /bin/bash
 INSTALLOG=/root/acid-install.log
+REQUIRECENTOSMAJOR=5
 
 function log {
 	local tstamp=$(/bin/date)
@@ -27,6 +28,24 @@ else
 fi
 
 logecho "****** Phase 1 post install ******"
+logecho "Verifying this is a CentOS distro..."
+grep CentOS /etc/redhat-release >/dev/null 2>&1 
+if [ $? -ne 0 ]
+then
+	die "Sorry, this does not seem to be a CentOS distro!"
+fi
+
+CENTOSVERS=$(cat /etc/redhat-release | cut -d ' ' -f3)
+CENTOSVMAJOR=$(echo "$CENTOSVERS" | cut -d '.' -f1)
+CENTOSVMINOR=$(echo "$CENTOSVERS" | cut -d '.' -f2)
+
+logecho "Check to see that we can install on CentOS $CENTOSVERS..."
+if [ $CENTOSVMAJOR -ne $REQUIRECENTOSMAJOR ]
+then
+	die "Install CD out of date! Please download and burn a new disk!" 
+fi
+logecho "CentOS version OK"
+
 logecho "Repository to use: $REPO"
 
 sleep 1
