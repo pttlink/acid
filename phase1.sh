@@ -17,6 +17,25 @@ function die {
         exit 255
 }
 
+
+function promptyn
+{
+        echo -n "$1 [y/N]? "
+        read ANSWER
+	if [ ! -z $ANSWER ]
+	then
+       		if [ $ANSWER = Y ] || [ $ANSWER = y ]
+      		then
+                	ANSWER=Y
+        	else
+                	ANSWER=N
+        	fi
+	else
+		ANSWER=N
+	fi
+}
+
+
 # Determine the repository from the URL embedded in rc.local at initial load
 
 if [ -e /etc/rc.d/acidrepo ]
@@ -45,6 +64,18 @@ then
 	die "Install CD out of date! Please download and burn a new disk!" 
 fi
 logecho "CentOS version OK"
+
+echo "Do you require a static IP to be configured on eth0 for the installer"
+promptyn "to access the Internet during the installation? (say N if unsure)"
+if [ "$ANSWER" = "Y" ]
+then
+	/usr/sbin/system-config-network
+	echo "Loading new network config...."
+	/sbin/ifdown eth0
+	/bin/sleep 3
+	/sbin/ifup eth0
+fi
+
 
 logecho "Repository to use: $REPO"
 
