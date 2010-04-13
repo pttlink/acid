@@ -99,7 +99,7 @@ then
 else
 	kdevel=kernel-PAE-devel	
 fi
-yum -y install zlib-devel "$kdevel" alsa-lib-devel ncurses-devel libusb-devel newt-devel openssl-devel
+yum -y install zlib-devel "$kdevel" alsa-lib-devel ncurses-devel libusb-devel newt-devel openssl-devel curl-devel
 if [ $? -gt 0 ]
 then
 	die "Unable install development library headers"
