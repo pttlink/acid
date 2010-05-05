@@ -156,12 +156,24 @@ fi
 
 rm -f /tmp/scrget.sh
 
-logecho "Installing rc.updatenodelist in /usr/local"
-
 mv -f /etc/rc.d/rc.local.orig /etc/rc.d/rc.local; sync
+
+egrep  setterm /etc/rc.d/rc.local
+if [ $? -gt 0 ]
+then
+	logecho "Installing setterms in /usr/local"
+	echo 'for(( i = 1; i < 7; i++))' >> /etc/rc.d/rc.local
+	echo 'do' >> /etc/rc.d/rc.local
+        echo '  setterm -blank 0 >/dev/tty$i' >> /etc/rc.d/rc.local
+	echo 'done' >> /etc/rc.d/rc.local
+fi
+
+
+
 egrep updatenodelist /etc/rc.d/rc.local
 if [ $? -gt 0 ]
 then
+	logecho "Installing rc.updatenodelist in /usr/local"
 	echo "/etc/rc.d/rc.updatenodelist &" >> /etc/rc.d/rc.local
 fi
 
