@@ -2,6 +2,9 @@
 HWTYPE=usbradio
 #HWTYPE=pciradio
 
+ASTSRCDIR=/usr/src/astsrc
+
+
 echo "****** Asterisk Installation ******"
 sleep 1
 
@@ -9,12 +12,10 @@ ntpdate pool.ntp.org
 
 echo "MENUSELECT_MODULES=wcusb xpp" > /etc/zaptel.makeopts
 
-DESTDIR=/usr/src
+mkdir -p $ASTSRCDIR
+rm -rf $ASTSRCDIR/zaptel $ASTSRCDIR/libpri $ASTSRCDIR/asterisk
 
-mkdir -p $DESTDIR
-rm -rf $DESTDIR/zaptel $DESTDIR/libpri $DESTDIR/asterisk
-
-cd $DESTDIR
+cd $ASTSRCDIR
 
 echo "Unpacking files.tar.gz..."
 
@@ -26,8 +27,8 @@ then
 	exit 255
 fi
 
-rm -f $DESTDIR/asterisk/menuselect.makeopts
-rm -f $DESTDIR/Makefile
+rm -f $ASTSRCDIR/asterisk/menuselect.makeopts
+rm -f $ASTSRCDIR/Makefile
 
 echo "Compiling Zaptel..."
 cd zaptel
@@ -128,7 +129,7 @@ then
 fi
 
 echo "Copying rpt sounds..."
-cp -a $DESTDIR/sounds/* /var/lib/asterisk/sounds
+cp -a $ASTSRCDIR/sounds/* /var/lib/asterisk/sounds
 if [ $? -gt 0 ]
 then
 	echo "Failure: Unable to copy rpt sounds"
