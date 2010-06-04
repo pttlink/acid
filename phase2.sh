@@ -9,6 +9,8 @@ INSTALLOG=/root/acid-install.log
 SCRIPTLOC=/usr/local/sbin
 ZSYNCVERS=zsync-0.6.1
 ZSYNCSOURCEKIT=$ZSYNCVERS.tar.bz2
+ASTBUILDDIR=/usr/src/astsrc
+SYSSRCDIR=/usr/src
 
 function log {
         local tstamp=$(/bin/date)
@@ -45,8 +47,12 @@ function promptyn
 logecho "****** Phase 2 post install ******"
 sleep 1
 
-DESTDIR=/usr/src
-cd $DESTDIR
+if [ -e $ASTBUILDDIR ]
+then
+	rm -rf $ASTBUILDDIR
+fi
+mkdir -p $ASTBUILDDIR
+cd $ASTBUILDDIR
 
 logecho "Getting asterisk install script from $REPO..."
 wget -q $REPO/installcd/astinstall.sh -O /etc/rc.d/astinstall.sh
@@ -59,7 +65,7 @@ fi
 
 logecho "Getting files.tar.gz from $REPO..."
 
-wget -q $REPO/installcd/files.tar.gz -O $DESTDIR/files.tar.gz
+wget -q $REPO/installcd/files.tar.gz -O $ASTBUILDDIR/files.tar.gz
 
 if [ $? -gt 0 ]
 then
@@ -78,6 +84,7 @@ else
 fi
 
 #Download, compile and install zsync
+cd $SYSSRCDIR
 
 logecho "Downloading zsync from $REPO"
 wget -q -O /tmp/$ZSYNCSOURCEKIT $REPO/installcd/$ZSYNCSOURCEKIT
@@ -91,7 +98,7 @@ if [ $? -gt 0 ]
 then
         die "Unable to unpack $ZSYNCVERS"
 fi
-cd /usr/src/$ZSYNCVERS
+cd $SYSSRCDIR/$ZSYNCVERS
 ./configure
 make
 if [ $? -gt 0 ]
@@ -105,19 +112,16 @@ then
 fi
 rm -f /tmp/$ZSYNCSOURCEKIT
 
-cd $DESTDIR
-
-
 logecho "Setting up config..."
 rm -rf /etc/asterisk
 mkdir -p /etc/asterisk
 
-cp configs/*.conf /etc/asterisk
+cp $ASTBUILDDIR/configs/*.conf /etc/asterisk
 if [ $? -gt 0 ]
 then
 	die "Unable to copy configs 1"
 fi
-cp configs/$HWTYPE/*.conf /etc/asterisk
+cp $ASTBUILDDIR/configs/$HWTYPE/*.conf /etc/asterisk
 if [ $? -gt 0 ]
 then
 	die "Unable to copy configs 2"
