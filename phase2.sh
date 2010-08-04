@@ -92,7 +92,7 @@ if [ $? -gt 0 ]
 then
         die "Unable to download $ZSYNCVERS"
 fi
-cd /usr/src
+
 tar xvjf /tmp/$ZSYNCSOURCEKIT
 if [ $? -gt 0 ]
 then
