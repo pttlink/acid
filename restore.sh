@@ -20,10 +20,6 @@ then
 		sleep 1
 		service asterisk start
 	fi
-	if [ -e /tmp/irlp_backup.tgz ]
-	then
-		echo "Note: IRLP backup is in /tmp/irlp_backup.tgz"
-	fi
 else
 	echo "/root/backup.tgz does not exist!"
 fi
