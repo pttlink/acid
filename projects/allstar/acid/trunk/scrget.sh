@@ -43,7 +43,7 @@ then
 fi
 	
 mkdir -p $TMPLOC
-for file in astdn.sh astres.sh astup.sh backup.sh irlpsetup.sh nodesetup.sh nscheck.sh rc.updatenodelist restore.sh savenode.sh scrupd.sh
+for file in astdn.sh astres.sh astup.sh backup.sh nodesetup.sh nscheck.sh rc.updatenodelist restore.sh savenode.sh scrupd.sh
 do
 	wget -q $REPO/installcd/$file -O $TMPLOC/$file
 	if [ $? -ne 0 ]

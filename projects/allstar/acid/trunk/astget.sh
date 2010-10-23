@@ -138,7 +138,7 @@ fi
 #
 rm -f $DESTDIR/files.tar.*
 mv -f $TMPDIR/files.tar.gz $DESTDIR
-(cd $DESTDIR; rm -rf asterisk libpri zaptel allstar configs irlp* Makefile) 
+(cd $DESTDIR; rm -rf asterisk libpri zaptel allstar configs Makefile) 
 (cd /usr/lib/asterisk/modules; rm  -f *.so)
 #
 # Exec install script
